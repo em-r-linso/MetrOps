@@ -1,0 +1,14 @@
+# environment variables
+.env
+
+# virtual environment
+venv/
+
+# python cache
+__pycache__/
+
+# database
+db.sqlite3
+
+# VS Code project files
+.vscode/
