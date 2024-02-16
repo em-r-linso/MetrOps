@@ -12,3 +12,9 @@ db.sqlite3
 
 # VS Code project files
 .vscode/
+
+# workflow/automation
+*.ps1
+*.bat
+*.cmd
+.pylintrc
