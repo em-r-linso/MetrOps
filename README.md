@@ -16,7 +16,7 @@ Built with [Django](https://www.djangoproject.com/).
 
 ### Setup
 
-1. Clone this repo:
+1. Clone this repo, install the dependencies, and run the migrations:
 
     Windows:
 
@@ -81,7 +81,7 @@ The app will run at localhost:8000.
 
 ### Admin
 
-You will need to populate the database yourself by creating a user and logging in to the admin panel.
+You will need to populate the database yourself by creating a user and logging in to the admin panel:
 
 ```bash
 python manage.py createsuperuser
