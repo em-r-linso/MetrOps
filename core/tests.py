@@ -23,10 +23,25 @@ class ViewTestMixin:
         self.assertTemplateUsed(response, self.template_name)
 
 
+# This is also the base.html test
 class HomepageViewTest(ViewTestMixin, TestCase):
     url = "/"
     url_name = "core:homepage"
     template_name = "core/homepage.html"
+
+    @classmethod
+    def setUpTestData(cls):
+        cls.username = "testuser"
+        cls.password = "12345"
+
+        cls.user = get_user_model().objects.create_user(
+            username=cls.username, password=cls.password
+        )
+
+    def test_username_displayed_when_logged_in(self):
+        self.client.login(username=self.username, password=self.password)
+        response = self.client.get(reverse(self.url_name))
+        self.assertContains(response, self.username)
 
 
 class LoginViewTest(ViewTestMixin, TestCase):
