@@ -74,3 +74,19 @@ class LoginViewTest(ViewTestMixin, TestCase):
         self.assertTrue(
             "Please enter a correct username and password." in response.content.decode()
         )
+
+
+class LogoutTest(TestCase):
+    @classmethod
+    def setUpTestData(cls):
+        cls.username = "testuser"
+        cls.password = "12345"
+
+        cls.user = get_user_model().objects.create_user(
+            username=cls.username, password=cls.password
+        )
+
+    def test_redirect_when_logout(self):
+        self.client.login(username=self.username, password=self.password)
+        response = self.client.post(reverse("core:logout"))
+        self.assertRedirects(response, reverse("core:homepage"))
