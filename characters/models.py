@@ -1,5 +1,6 @@
 from django.db import models
 from django.contrib.auth import get_user_model
+from django.core.exceptions import ValidationError
 
 
 class LifepathQuestion(models.Model):
@@ -12,6 +13,7 @@ class LifepathQuestion(models.Model):
         null=True,
         blank=True,
     )
+    is_first_question = models.BooleanField(default=False)
 
     def __str__(self):
         return self.content
@@ -31,6 +33,22 @@ class LifepathAnswer(models.Model):
 
     def __str__(self):
         return self.content
+
+
+class LifepathConfig(models.Model):
+    first_question = models.OneToOneField(
+        LifepathQuestion,
+        on_delete=models.SET_NULL,
+        related_name="start_point",
+        null=True,
+        blank=True,
+    )
+
+    def save(self, *args, **kwargs):
+        if LifepathConfig.objects.exists() and not self.pk:
+            # Prevents a new instance from being created if one already exists
+            raise ValidationError("There can be only one LifepathConfig instance.")
+        return super(LifepathConfig, self).save(*args, **kwargs)
 
 
 class Character(models.Model):

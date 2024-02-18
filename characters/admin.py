@@ -1,5 +1,5 @@
 from django.contrib import admin
-from .models import Character, LifepathQuestion, LifepathAnswer
+from .models import Character, LifepathQuestion, LifepathAnswer, LifepathConfig
 
 
 class LifepathAnswerInline(admin.TabularInline):
@@ -28,3 +28,4 @@ class CharacterAdmin(admin.ModelAdmin):
 
 admin.site.register(Character, CharacterAdmin)
 admin.site.register(LifepathQuestion, LifepathQuestionAdmin)
+admin.site.register(LifepathConfig)

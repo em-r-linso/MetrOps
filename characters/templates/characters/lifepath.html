@@ -1,0 +1,13 @@
+{% extends "core/base.html" %}
+
+{% block content %}
+    <form method="post" action="{% url 'characters:lifepath_question' question_id=question.pk%}">
+        {% csrf_token %}
+        <p>{{ question.content }}</p>
+        {% for answer in question.lifepath_answers.all %}
+            <input type="radio" name="answer" value="{{ answer.id }}" id="answer{{ forloop.counter }}">
+            <label for="answer{{ forloop.counter }}">{{ answer.content }}</label><br>
+        {% endfor %}
+        <button type="submit">Submit</button>
+    </form>
+{% endblock %}
