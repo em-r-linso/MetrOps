@@ -1,5 +1,26 @@
 {% extends "core/base.html" %}
 
 {% block content %}
-    <span>characters</span>
+    {% if characters %}
+            <table>
+        <thead>
+            <tr>
+                <th>Name</th>
+                <th>Created</th>
+                <th>Last Modified</th>
+            </tr>
+        </thead>
+        <tbody>
+            {% for character in characters %}
+            <tr>
+                <td>{{ character.name }}</td>
+                <td>{{ character.created_at|date:"Y-m-d H:i" }}</td>
+                <td>{{ character.updated_at|date:"Y-m-d H:i" }}</td>
+            </tr>
+            {% endfor %}
+        </tbody>
+    </table>
+    {% else %}
+        <p>You don't have any characters.</p>
+    {% endif %}
 {% endblock %}
