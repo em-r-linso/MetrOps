@@ -5,17 +5,26 @@
 </html>
 <body>
     <header>
-        <h1>MetrOps</h1>
-        {% if user.is_authenticated %}
-            <span>Logged in as {{ user.username }}</span>
-            {% csrf_token %}
-            <form action="{% url 'core:logout' %}" method="post">
+        <div id="branding">
+            <h1>MetrOps</h1>
+        </div>
+        <nav>
+            <ul>
+                <li><a href="{% url 'characters:index' %}">Characters</a></li>
+            </ul>
+        </nav>
+        <div id="user">
+            {% if user.is_authenticated %}
+                <span>Logged in as {{ user.username }}</span>
                 {% csrf_token %}
-                <input type="submit" value="Sign Out">
-            </form>
-        {% else %}
-            <a href="{% url 'core:login' %}">Sign In</a>
-        {% endif %}
+                <form action="{% url 'core:logout' %}" method="post">
+                    {% csrf_token %}
+                    <input type="submit" value="Sign Out">
+                </form>
+            {% else %}
+                <a href="{% url 'core:login' %}">Sign In</a>
+            {% endif %}
+        </div>
     </header>
     <main>
         {% block content %}{% endblock %}

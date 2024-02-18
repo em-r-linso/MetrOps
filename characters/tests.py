@@ -1,9 +1,13 @@
-from unittest.mock import patch, MagicMock
-from django.test import TestCase
 from django.contrib.auth import get_user_model
-from .models import Character
+from django.test import TestCase
+from django.urls import reverse
 from django.utils import timezone
+
+from unittest.mock import patch
+
 import datetime
+
+from .models import Character
 
 
 class CharacterModelTest(TestCase):
@@ -30,3 +34,29 @@ class CharacterModelTest(TestCase):
         self.assertEqual(character.name, "Test Character")
         self.assertEqual(character.created_at, mock_now.return_value)
         self.assertEqual(character.updated_at, mock_now.return_value)
+
+
+class ViewTestMixin:
+    url = None
+    url_name = None
+    template_name = None
+
+    def test_url_exists_at_desired_location(self):
+        response = self.client.get(self.url)
+        self.assertEqual(response.status_code, 200)
+
+    def test_url_accessible_by_name(self):
+        response = self.client.get(reverse(self.url_name))
+        self.assertEqual(response.status_code, 200)
+
+    # this test fails if test_url_exists_at_desired_location fails
+    # it's an annoying dependency, but the alternative is so many try-catches
+    def test_uses_correct_template(self):
+        response = self.client.get(reverse(self.url_name))
+        self.assertTemplateUsed(response, self.template_name)
+
+
+class IndexViewTest(ViewTestMixin, TestCase):
+    url = "/characters"
+    url_name = "characters:index"
+    template_name = "characters/index.html"
