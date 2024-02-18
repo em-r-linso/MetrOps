@@ -8,13 +8,13 @@ body {
 
 header,
 main {
-    padding: 20px 20px;
+    padding: 1rem 1rem;
 }
 
 footer {
     display: flex;
     justify-content: space-between;
-    padding: 10px 20px;
+    padding: 0.5rem 1rem;
     font-size: 0.8rem;
 }
 
