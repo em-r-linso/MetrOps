@@ -37,23 +37,40 @@ class CharacterModelTest(TestCase):
 
 
 class ViewTestMixin:
+    """Mixin for testing views in the characters app.
+
+    All of the views in this app are for logged in users only, so this mixin
+    assumes that guest viewers should get bounced away.
+    """
+
     url = None
     url_name = None
     template_name = None
 
-    def test_url_exists_at_desired_location(self):
-        response = self.client.get(self.url)
-        self.assertEqual(response.status_code, 200)
+    @classmethod
+    def setUpTestData(cls):
+        cls.username = "testuser"
+        cls.password = "12345"
 
-    def test_url_accessible_by_name(self):
+        cls.user = get_user_model().objects.create_user(
+            username=cls.username, password=cls.password
+        )
+
+    def test_view_accessible_when_logged_in(self):
+        self.client.login(username=self.username, password=self.password)
         response = self.client.get(reverse(self.url_name))
         self.assertEqual(response.status_code, 200)
-
-    # this test fails if test_url_exists_at_desired_location fails
-    # it's an annoying dependency, but the alternative is so many try-catches
-    def test_uses_correct_template(self):
-        response = self.client.get(reverse(self.url_name))
         self.assertTemplateUsed(response, self.template_name)
+
+    def test_redirect_when_not_logged_in(self):
+        response = self.client.get(reverse(self.url_name))
+        self.assertEqual(response.status_code, 302)
+        self.assertRedirects(
+            response,
+            # should redirect to login page
+            # "next" should be the page we were trying to access
+            f"/accounts/login/?next={reverse(self.url_name)}",
+        )
 
 
 class IndexViewTest(ViewTestMixin, TestCase):
